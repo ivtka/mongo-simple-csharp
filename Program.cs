@@ -23,28 +23,7 @@ namespace MongoDBSimple
         }
         else if (option == "1")
         {
-<<<<<<< HEAD
           string? collection = ReadCollection();
-||||||| e266b50
-          Console.WriteLine("Enter name of Collection to Show: <Customers> | <TypesLoans> | <ProvidedLoans>");
-          Console.Write("> ");
-          string? collection = Console.ReadLine();
-          while (collection != "Customers" || collection != "TypesLoans"
-            || collection != "ProvidedLoans")
-          {
-            if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") break;
-            Console.Write("> "); collection = Console.ReadLine();
-          }
-=======
-          Console.WriteLine("Enter name of Collection to Show: <Customers> | <TypesLoans> | <ProvidedLoans>");
-          Console.Write("> ");
-          string? collection = Console.ReadLine();
-          while (collection != "Customers" || collection != "TypesLoans" || collection != "ProvidedLoans")
-          {
-            if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") break;
-            Console.Write("> "); collection = Console.ReadLine();
-          }
->>>>>>> 7d7eae2087c85c2c608f9697892822fd9f68f810
           mongo.Show(collection);
         }
         else
