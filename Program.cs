@@ -18,28 +18,12 @@ namespace MongoDBSimple
         if (option == "3") break;
         else if (option == "2")
         {
-          Console.WriteLine("Enter name of Collection to Insert: <Customers> | <TypesLoans> | <ProvidedLoans>");
-          Console.Write("> ");
-          string? collection = Console.ReadLine();
-          while (collection != "Customers" || collection != "TypesLoans"
-            || collection != "ProvidedLoans")
-          {
-            if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") break;
-            Console.Write("> "); collection = Console.ReadLine();
-          }
+          string? collection = ReadCollection();
           mongo.Insert(collection);
         }
         else if (option == "1")
         {
-          Console.WriteLine("Enter name of Collection to Show: <Customers> | <TypesLoans> | <ProvidedLoans>");
-          Console.Write("> ");
-          string? collection = Console.ReadLine();
-          while (collection != "Customers" || collection != "TypesLoans"
-            || collection != "ProvidedLoans")
-          {
-            if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") break;
-            Console.Write("> "); collection = Console.ReadLine();
-          }
+          string? collection = ReadCollection();
           mongo.Show(collection);
         }
         else
@@ -47,6 +31,21 @@ namespace MongoDBSimple
           Console.WriteLine("> Not found this option.");
         }
       }
+    }
+
+    static public string ReadCollection()
+    {
+      Console.WriteLine("Enter name of Collection to Show: <Customers> | <TypesLoans> | <ProvidedLoans>");
+      Console.Write("> ");
+      string? collection = Console.ReadLine();
+      while (collection != "Customers" || collection != "TypesLoans"
+        || collection != "ProvidedLoans")
+      {
+        if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") return collection;
+        Console.Write("> "); collection = Console.ReadLine();
+      }
+
+      return null;
     }
   }
 }

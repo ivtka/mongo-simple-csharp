@@ -6,20 +6,18 @@ namespace MongoDBSimple
 
   abstract class Query
   {
-    public abstract ICollection Create();
+    public abstract ICollection Create(IMongoDatabase db);
 
     public void Insert(IMongoDatabase db)
     {
-      var collection = Create();
-      var cursor = db.GetCollection<BsonDocument>(collection.Collection());
-      cursor.InsertOne(collection.Document(db));
+      var collection = Create(db);
+      collection.collection?.InsertOne(collection.Document(db));
     }
 
     public void Show(IMongoDatabase db)
     {
-      var collection = Create();
-      var cursor = db.GetCollection<BsonDocument>(collection.Collection());
-      var objects = cursor.Find(new BsonDocument()).Project("{_id: 0}").ToList();
+      var collection = Create(db);
+      var objects = collection.collection.Find(new BsonDocument()).Project("{_id: 0}").ToList();
       objects.ForEach(doc =>
       {
         Console.WriteLine(doc);
@@ -28,39 +26,39 @@ namespace MongoDBSimple
 
     public ObjectId Find(IMongoDatabase db, BsonDocument doc)
     {
-      var collection = Create();
-      var cursor = db.GetCollection<BsonDocument>(collection.Collection());
-      var obj = cursor.Find(doc).ToList();
+      var collection = Create(db);
+      var obj = collection.collection.Find(doc).ToList();
       return ObjectId.Parse(obj[0].GetValue("_id").ToString());
     }
   };
 
   class CustomersQuery : Query
   {
-    public override ICollection Create()
+    public override ICollection Create(IMongoDatabase db)
     {
-      return new CustomersCollection();
+      return new CustomersCollection(db);
     }
   };
 
   class ProvidedLoansQuery : Query
   {
-    public override ICollection Create()
+    public override ICollection Create(IMongoDatabase db)
     {
-      return new ProvidedLoansCollection();
+      return new ProvidedLoansCollection(db);
     }
   }
 
   class TypesLoansQuery : Query
   {
-    public override ICollection Create()
+    public override ICollection Create(IMongoDatabase db)
     {
-      return new TypesLoansCollection();
+      return new TypesLoansCollection(db);
     }
   }
 
   abstract class ICollection
   {
+    public IMongoCollection<BsonDocument>? collection { get; set; } = null;
     public abstract string Collection();
 
     public abstract BsonDocument Document(IMongoDatabase db);
@@ -68,6 +66,12 @@ namespace MongoDBSimple
 
   class CustomersCollection : ICollection
   {
+
+    public CustomersCollection(IMongoDatabase db)
+    {
+      collection = db.GetCollection<BsonDocument>(this.Collection());
+    }
+
     public override string Collection()
     {
       return "Customers";
@@ -103,6 +107,12 @@ namespace MongoDBSimple
 
   class ProvidedLoansCollection : ICollection
   {
+
+    public ProvidedLoansCollection(IMongoDatabase db)
+    {
+      collection = db.GetCollection<BsonDocument>(this.Collection());
+    }
+
     public override string Collection()
     {
       return "ProvidedLoans";
@@ -142,6 +152,11 @@ namespace MongoDBSimple
 
   class TypesLoansCollection : ICollection
   {
+    public TypesLoansCollection(IMongoDatabase db)
+    {
+      collection = db.GetCollection<BsonDocument>(this.Collection());
+    }
+
     public override string Collection()
     {
       return "TypesLoans";
