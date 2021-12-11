@@ -21,8 +21,7 @@ namespace MongoDBSimple
           Console.WriteLine("Enter name of Collection to Insert: <Customers> | <TypesLoans> | <ProvidedLoans>");
           Console.Write("> ");
           string? collection = Console.ReadLine();
-          while (collection != "Customers" || collection != "TypesLoans"
-            || collection != "ProvidedLoans")
+          while (collection != "Customers" || collection != "TypesLoans" || collection != "ProvidedLoans")
           {
             if (collection == "Customers" || collection == "TypesLoans" || collection == "ProvidedLoans") break;
             Console.Write("> "); collection = Console.ReadLine();
